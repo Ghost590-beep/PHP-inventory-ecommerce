@@ -1,0 +1,663 @@
+/* =================================================================
+   DIVA BEAUTY — Auth Pages Stylesheet
+   Shared by login.html and register.html
+   ================================================================= */
+
+/* ── Reset & Base ─────────────────────────────────────────────── */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --crimson: #c41230;
+  --crimson-dark: #9b0e26;
+  --crimson-pale: rgba(196, 18, 48, 0.08);
+  --white: #ffffff;
+  --off-white: #f8f8f8;
+  --text-dark: #1c1c1e;
+  --text-muted: #6b7280;
+  --border: #e5e7eb;
+  --success: #059669;
+  --error: #dc2626;
+
+  --font-body: "Poppins", system-ui, sans-serif;
+  --font-display: "Playfair Display", Georgia, serif;
+
+  --card-shadow: 0 32px 80px rgba(0, 0, 0, 0.4), 0 8px 24px rgba(0, 0, 0, 0.2);
+  --radius-card: 20px;
+  --radius-input: 10px;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  font-family: var(--font-body);
+  color: var(--text-dark);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* =================================================================
+   BACKGROUND — cosmetic image with tinted overlay
+   ================================================================= */
+.auth-bg {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+
+  background-image: url("../assets/comesticbackground.webp");
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+}
+
+/* Login overlay — rich crimson tint, image clearly visible */
+.auth-bg--login::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    135deg,
+    rgba(90, 0, 12, 0.62) 0%,
+    rgba(140, 10, 30, 0.58) 50%,
+    rgba(60, 0, 8, 0.65) 100%
+  );
+}
+
+/* Register overlay — soft rose/pink tint */
+.auth-bg--register::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 210, 220, 0.55) 0%,
+    rgba(220, 90, 120, 0.42) 50%,
+    rgba(255, 180, 195, 0.55) 100%
+  );
+}
+
+/* =================================================================
+   PAGE LAYOUT
+   ================================================================= */
+.auth-page {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* ── Top header — logo on background ─────────────────────────── */
+.page-header {
+  padding: 24px 40px;
+  flex-shrink: 0;
+}
+
+/* ── Main — vertically centered card ─────────────────────────── */
+.page-main {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px 24px 32px;
+}
+
+/* =================================================================
+   BRAND LOGO (on background, outside card)
+   ================================================================= */
+.brand-logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+}
+
+/* Stylised "D" icon mark */
+.brand-logo__mark {
+  width: 44px;
+  height: 44px;
+  background: var(--white);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.18);
+}
+
+.brand-logo__mark svg {
+  width: 26px;
+  height: 26px;
+}
+
+.brand-logo__text {
+  line-height: 1.15;
+}
+
+.brand-logo__name {
+  display: block;
+  font-size: 0.88rem;
+  font-weight: 700;
+  letter-spacing: 2.5px;
+  color: var(--white);
+}
+
+.brand-logo__tagline {
+  display: block;
+  font-size: 0.68rem;
+  letter-spacing: 1.2px;
+  color: rgba(255, 255, 255, 0.75);
+}
+
+/* =================================================================
+   AUTH CARD
+   ================================================================= */
+.auth-card {
+  background: var(--white);
+  border-radius: var(--radius-card);
+  box-shadow: var(--card-shadow);
+  width: 100%;
+  padding: 48px 44px 40px;
+  position: relative;
+  overflow: hidden;
+}
+
+.auth-card--login {
+  max-width: 450px;
+}
+.auth-card--register {
+  max-width: 480px;
+}
+
+/* Crimson top accent line */
+.auth-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(
+    90deg,
+    var(--crimson-dark),
+    var(--crimson),
+    #f04060
+  );
+}
+
+/* ── Card Heading ─────────────────────────────────────────────── */
+.card-title {
+  font-family: var(--font-display);
+  font-size: 2rem;
+  font-weight: 800;
+  line-height: 1.15;
+  color: var(--text-dark);
+  margin-bottom: 8px;
+}
+
+/* The accent word (e.g. "Back", "Account") */
+.card-title .accent {
+  color: var(--crimson);
+}
+
+.card-subtitle {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin-bottom: 32px;
+}
+
+/* ── Alert Banner ─────────────────────────────────────────────── */
+.banner {
+  display: none;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 12px 14px;
+  border-radius: 10px;
+  font-size: 0.82rem;
+  font-weight: 500;
+  margin-bottom: 20px;
+  line-height: 1.45;
+}
+.banner--success {
+  display: flex;
+  background: #f0fdf4;
+  color: var(--success);
+  border: 1px solid #bbf7d0;
+}
+.banner--error {
+  display: flex;
+  background: #fef2f2;
+  color: var(--error);
+  border: 1px solid #fecaca;
+}
+
+/* =================================================================
+   FORM FIELDS
+   ================================================================= */
+.form {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Two-column row (first + last name) */
+.form__row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+.field {
+  margin-bottom: 18px;
+}
+.field:last-of-type {
+  margin-bottom: 0;
+}
+
+/* Label row — can hold a link on the right */
+.field__head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 7px;
+}
+
+.field__label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-dark);
+}
+
+.field__link {
+  font-size: 0.75rem;
+  color: var(--crimson);
+  text-decoration: none;
+  font-weight: 500;
+}
+.field__link:hover {
+  text-decoration: underline;
+}
+
+/* Input wrapper holds icon + input + optional eye toggle */
+.input-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.input-wrap__icon {
+  position: absolute;
+  left: 14px;
+  display: flex;
+  align-items: center;
+  color: #9ca3af;
+  pointer-events: none;
+}
+.input-wrap__icon svg {
+  width: 16px;
+  height: 16px;
+}
+
+/* Text inputs */
+.field input[type="text"],
+.field input[type="email"],
+.field input[type="password"],
+.field input[type="tel"] {
+  width: 100%;
+  height: 48px;
+  padding: 0 44px 0 42px;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-input);
+  font-size: 0.875rem;
+  font-family: var(--font-body);
+  color: var(--text-dark);
+  background: var(--off-white);
+  outline: none;
+  transition:
+    border-color 0.18s,
+    box-shadow 0.18s,
+    background 0.18s;
+}
+.field input::placeholder {
+  color: #c4c4c4;
+  font-size: 0.82rem;
+}
+.field input:focus {
+  border-color: var(--crimson);
+  background: var(--white);
+  box-shadow: 0 0 0 3px var(--crimson-pale);
+}
+.field input.is-error {
+  border-color: var(--error);
+}
+.field input.is-error:focus {
+  box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.09);
+}
+
+/* Eye button (password toggle) */
+.eye-btn {
+  position: absolute;
+  right: 12px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #9ca3af;
+  display: flex;
+  align-items: center;
+  padding: 4px;
+  border-radius: 6px;
+  transition: color 0.15s;
+}
+.eye-btn:hover {
+  color: var(--crimson);
+}
+.eye-btn svg {
+  width: 16px;
+  height: 16px;
+}
+
+/* Inline validation message */
+.field-error {
+  display: block;
+  font-size: 0.72rem;
+  color: var(--error);
+  margin-top: 5px;
+  min-height: 14px;
+}
+
+/* =================================================================
+   CHECKBOX
+   ================================================================= */
+.field--check {
+  margin-bottom: 24px;
+  margin-top: 4px;
+}
+
+.check-label {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  cursor: pointer;
+  line-height: 1.5;
+  user-select: none;
+}
+.check-label a {
+  color: var(--crimson);
+  font-weight: 600;
+  text-decoration: none;
+}
+.check-label a:hover {
+  text-decoration: underline;
+}
+.check-label input[type="checkbox"] {
+  display: none;
+}
+
+.checkmark {
+  flex-shrink: 0;
+  width: 18px;
+  height: 18px;
+  border: 2px solid var(--border);
+  border-radius: 5px;
+  margin-top: 2px;
+  background: var(--white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition:
+    background 0.15s,
+    border-color 0.15s;
+}
+.check-label input:checked ~ .checkmark {
+  background: var(--crimson);
+  border-color: var(--crimson);
+}
+.check-label input:checked ~ .checkmark::after {
+  content: "";
+  display: block;
+  width: 4px;
+  height: 8px;
+  border: 2px solid var(--white);
+  border-top: none;
+  border-left: none;
+  transform: rotate(45deg) translateY(-1px);
+}
+
+/* =================================================================
+   PRIMARY BUTTON
+   ================================================================= */
+.btn-primary {
+  width: 100%;
+  height: 50px;
+  background: linear-gradient(
+    135deg,
+    var(--crimson-dark) 0%,
+    var(--crimson) 55%,
+    #e8354f 100%
+  );
+  color: var(--white);
+  border: none;
+  border-radius: var(--radius-input);
+  font-family: var(--font-body);
+  font-size: 0.92rem;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  box-shadow: 0 6px 24px rgba(196, 18, 48, 0.38);
+  transition:
+    opacity 0.18s,
+    box-shadow 0.18s,
+    transform 0.1s;
+  margin-top: 4px;
+}
+.btn-primary:hover:not(:disabled) {
+  opacity: 0.92;
+  box-shadow: 0 8px 30px rgba(196, 18, 48, 0.48);
+  transform: translateY(-1px);
+}
+.btn-primary:active:not(:disabled) {
+  transform: scale(0.99);
+}
+.btn-primary:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+.btn-primary svg {
+  flex-shrink: 0;
+}
+
+/* =================================================================
+   SOCIAL LOGIN
+   ================================================================= */
+.divider {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 24px 0 16px;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+.divider::before,
+.divider::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
+
+/* Stacked full-width social buttons */
+.social-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.social-btn {
+  width: 100%;
+  height: 46px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 0 20px;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-input);
+  background: var(--white);
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--text-dark);
+  cursor: pointer;
+  transition:
+    border-color 0.18s,
+    background 0.18s,
+    box-shadow 0.18s;
+}
+.social-btn:hover {
+  border-color: #d1d5db;
+  background: var(--off-white);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
+}
+.social-btn span {
+  flex: 1;
+  text-align: center;
+}
+.social-btn svg {
+  flex-shrink: 0;
+}
+
+/* =================================================================
+   SWITCH PAGE LINK
+   ================================================================= */
+.switch-text {
+  text-align: center;
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  margin-top: 22px;
+}
+.switch-text a {
+  color: var(--crimson);
+  font-weight: 600;
+  text-decoration: none;
+}
+.switch-text a:hover {
+  text-decoration: underline;
+}
+
+/* =================================================================
+   PAGE FOOTER — feature icons + copyright
+   ================================================================= */
+.page-footer {
+  position: relative;
+  z-index: 1;
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(6px);
+  border-top: 1px solid rgba(255, 255, 255, 0.4);
+  padding: 14px 24px 10px;
+}
+
+.footer-features {
+  display: flex;
+  justify-content: center;
+  gap: 0;
+  max-width: 1000px;
+  margin: 0 auto 15px;
+}
+
+.footer-feature {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  padding: 0 16px;
+  border-right: 1px solid rgba(0, 0, 0, 0.08);
+  text-align: center;
+}
+.footer-feature:last-child {
+  border-right: none;
+}
+
+.footer-feature svg {
+  width: 20px;
+  height: 20px;
+  color: var(--crimson);
+  flex-shrink: 0;
+}
+
+.footer-feature strong {
+  display: block;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--crimson);
+  letter-spacing: 0.2px;
+}
+
+.footer-feature small {
+  font-size: 0.66rem;
+  color: var(--text-muted);
+}
+
+.footer-copy {
+  text-align: center;
+  font-size: 0.7rem;
+  color: var(--text-muted);
+}
+
+/* =================================================================
+   RESPONSIVE
+   ================================================================= */
+@media (max-width: 540px) {
+  .page-header {
+    padding: 20px 20px;
+  }
+
+  .auth-card {
+    padding: 36px 24px 32px;
+    border-radius: 16px;
+  }
+  .card-title {
+    font-size: 1.65rem;
+  }
+
+  .form__row {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+
+  .footer-features {
+    flex-wrap: wrap;
+  }
+  .footer-feature {
+    flex: 0 0 50%;
+    padding: 8px 12px;
+    border-right: none;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+  }
+  .footer-feature:nth-child(3),
+  .footer-feature:nth-child(4) {
+    border-bottom: none;
+  }
+}
+
+@media (max-width: 360px) {
+  .auth-card {
+    padding: 28px 18px 28px;
+  }
+  .footer-feature {
+    flex: 0 0 100%;
+  }
+}
