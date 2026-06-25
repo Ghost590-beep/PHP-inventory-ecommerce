@@ -1,0 +1,74 @@
+/* ==========================================================================
+   Nancy Beauty — register.css
+   Register-page–specific styles: wider panel, password hints.
+   ========================================================================== */
+
+/* Register panel is wider to fit the 2-col grid comfortably */
+.auth-layout--register .auth-layout__right {
+  width: 560px;
+}
+
+.auth-layout--register .auth-card {
+  max-width: 476px;
+}
+
+/* --------------------------------------------------------------------------
+   Password strength hints
+   -------------------------------------------------------------------------- */
+.pw-hints {
+  margin-top: 6px;
+}
+
+.pw-hints__title {
+  font-size: 0.74rem;
+  font-weight: 500;
+  color: var(--c-muted);
+  margin-bottom: 7px;
+}
+
+.pw-hints__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4px 10px;
+}
+
+.pw-hint {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.72rem;
+  color: var(--c-soft);
+  transition: color 0.18s ease;
+}
+
+.pw-hint svg {
+  width: 12px; height: 12px;
+  flex-shrink: 0;
+  color: var(--c-border);
+  transition: color 0.18s ease;
+}
+
+.pw-hint.met {
+  color: var(--c-success);
+}
+
+.pw-hint.met svg {
+  color: var(--c-success);
+}
+
+/* --------------------------------------------------------------------------
+   Responsive
+   -------------------------------------------------------------------------- */
+@media (max-width: 960px) {
+  .auth-layout--register .auth-layout__right { width: 500px; }
+}
+
+@media (max-width: 640px) {
+  .auth-layout--register .auth-layout__right { width: 100%; }
+
+  .pw-hints__grid { grid-template-columns: 1fr 1fr; }
+}
+
+@media (max-width: 390px) {
+  .pw-hints__grid { grid-template-columns: 1fr; }
+}

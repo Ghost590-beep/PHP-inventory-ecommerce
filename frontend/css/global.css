@@ -1,0 +1,775 @@
+/* ==========================================================================
+   Nancy Beauty — global.css
+   Shared styles: tokens, reset, background, layout, components, footer
+   ========================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,600&family=Poppins:wght@300;400;500;600;700&display=swap');
+
+/* --------------------------------------------------------------------------
+   1.  Design Tokens
+   -------------------------------------------------------------------------- */
+:root {
+  /* Brand palette */
+  --c-rose:        #c2375f;
+  --c-rose-mid:    #d4457a;
+  --c-rose-light:  #e8527e;
+  --c-rose-tint:   #fce4ee;
+  --c-rose-tint2:  #fff0f5;
+
+  /* Neutral */
+  --c-ink:         #18181b;
+  --c-ink-2:       #3f3f46;
+  --c-muted:       #71717a;
+  --c-soft:        #a1a1aa;
+  --c-border:      #e4e4e7;
+  --c-surface:     #f8f8fa;
+  --c-white:       #ffffff;
+
+  /* Feedback */
+  --c-error:       #dc2626;
+  --c-success:     #16a34a;
+
+  /* Radii */
+  --r-sm:  6px;
+  --r-md:  12px;
+  --r-lg:  18px;
+  --r-xl:  24px;
+  --r-2xl: 32px;
+  --r-full: 9999px;
+
+  /* Shadows */
+  --s-card:  0 2px 4px rgba(0,0,0,.04), 0 8px 24px rgba(0,0,0,.08), 0 24px 64px rgba(0,0,0,.10);
+  --s-input: 0 0 0 3px rgba(194,55,95,.18);
+  --s-btn:   0 4px 14px rgba(194,55,95,.40), 0 1px 3px rgba(194,55,95,.30);
+
+  /* Typography */
+  --f-display: 'Playfair Display', Georgia, serif;
+  --f-sans:    'Poppins', system-ui, -apple-system, sans-serif;
+
+  /* Easing */
+  --ease: 0.18s ease;
+}
+
+/* --------------------------------------------------------------------------
+   2.  Reset
+   -------------------------------------------------------------------------- */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html {
+  font-size: 16px;
+  -webkit-text-size-adjust: 100%;
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--f-sans);
+  color: var(--c-ink);
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background: var(--c-rose-tint2);
+}
+
+img, svg  { display: block; max-width: 100%; }
+ul        { list-style: none; }
+a         { color: var(--c-rose-mid); text-decoration: none; transition: color var(--ease); }
+a:hover   { color: var(--c-rose); }
+button    { font-family: var(--f-sans); cursor: pointer; border: none; background: none; }
+
+/* --------------------------------------------------------------------------
+   3.  Full-page background
+       Uses the high-quality cosmetic photo as the base.
+       A rose gradient overlay blends the orange studio tone into the brand palette.
+       Extends behind every element — no "cut" between left and right panels.
+   -------------------------------------------------------------------------- */
+.page-bg {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  /* High-quality cosmetic image — positioned so the woman anchors the left side */
+  background-image: url('../assets/images/cream-skincare-black-woman-excited-about-product-body-against-orange-studio-background-face-young-happy-african-model-with-smile-lotion-sunscreen-healthy-glow_590464-91999.jpg');
+  background-size: cover;
+  background-position: 28% center;
+  background-repeat: no-repeat;
+  /* Boost vibrancy slightly */
+  filter: saturate(1.08) brightness(0.96) contrast(1.04);
+}
+
+/* Brand-tone overlay — shifts orange warmth toward rose pink */
+.page-bg::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: linear-gradient(
+    108deg,
+    rgba(160,  30,  70, 0.32) 0%,   /* deep rose — left edge */
+    rgba(212,  69, 122, 0.20) 30%,  /* mid rose */
+    rgba(255, 210, 230, 0.14) 58%,  /* fade out near card */
+    rgba(255, 240, 248, 0.38) 100%  /* soft light — behind card */
+  );
+}
+
+/* Soft glow blobs — sit above overlay, blend with photo using soft-light */
+.page-bg__blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(72px);
+  pointer-events: none;
+  z-index: 2;
+  mix-blend-mode: soft-light;
+}
+
+.page-bg__blob--a {
+  width: 480px; height: 480px;
+  background: rgba(255, 150, 180, 0.55);
+  top: -100px; left: -60px;
+}
+
+.page-bg__blob--b {
+  width: 340px; height: 340px;
+  background: rgba(212, 69, 122, 0.40);
+  bottom: 40px; right: -40px;
+}
+
+.page-bg__blob--c {
+  width: 220px; height: 220px;
+  background: rgba(255, 230, 240, 0.65);
+  top: 42%; left: 28%;
+}
+
+/* --------------------------------------------------------------------------
+   4.  Page shell — wraps layout + footer
+   -------------------------------------------------------------------------- */
+.page-shell {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* --------------------------------------------------------------------------
+   5.  Auth layout (split: left content | right card)
+   -------------------------------------------------------------------------- */
+.auth-layout {
+  flex: 1;
+  display: flex;
+  align-items: stretch;
+}
+
+/* LEFT SIDE — transparent so gradient shows through */
+.auth-layout__left {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 44px 52px 56px;
+  min-height: calc(100vh - 88px); /* subtract footer height */
+}
+
+/* RIGHT SIDE — transparent panel that centres the white card */
+.auth-layout__right {
+  flex-shrink: 0;
+  width: 500px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 40px 40px 28px;
+  /* Subtle right-edge vignette so card "sits" on the page */
+  background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.18) 100%);
+}
+
+/* --------------------------------------------------------------------------
+   6.  Brand logo (top of left panel)
+   -------------------------------------------------------------------------- */
+.brand-logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  text-decoration: none;
+}
+
+.brand-logo__icon {
+  width: 48px; height: 48px;
+  background: var(--c-white);
+  border-radius: var(--r-md);
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 4px 16px rgba(194,55,95,.22);
+  flex-shrink: 0;
+  transition: transform var(--ease);
+}
+
+.brand-logo:hover .brand-logo__icon { transform: scale(1.06); }
+
+.brand-logo__name {
+  display: block;
+  font-family: var(--f-display);
+  font-weight: 700;
+  font-size: 1.15rem;
+  color: var(--c-white);
+  letter-spacing: 0.07em;
+  line-height: 1;
+  text-shadow: 0 1px 8px rgba(0,0,0,.12);
+}
+
+.brand-logo__tag {
+  display: block;
+  font-size: 0.70rem;
+  color: rgba(255,255,255,0.82);
+  letter-spacing: 0.06em;
+  font-weight: 400;
+  margin-top: 3px;
+}
+
+/* --------------------------------------------------------------------------
+   7.  Brand content (bottom of left panel)
+   -------------------------------------------------------------------------- */
+
+.brand-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255,255,255,0.88);
+  backdrop-filter: blur(8px);
+  border-radius: var(--r-full);
+  padding: 5px 16px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--c-rose);
+  margin-bottom: 18px;
+}
+
+.brand-headline {
+  font-family: var(--f-display);
+  font-size: clamp(2rem, 3.2vw, 2.9rem);
+  font-weight: 800;
+  color: var(--c-white);
+  line-height: 1.18;
+  margin-bottom: 14px;
+  text-shadow: 0 2px 16px rgba(0,0,0,.15);
+}
+
+.brand-text {
+  font-size: 0.88rem;
+  color: rgba(255,255,255,0.88);
+  line-height: 1.65;
+  max-width: 340px;
+  margin-bottom: 32px;
+}
+
+.brand-stats {
+  display: flex;
+  gap: 36px;
+}
+
+.brand-stat__num {
+  display: block;
+  font-family: var(--f-display);
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--c-white);
+  line-height: 1;
+}
+
+.brand-stat__lbl {
+  display: block;
+  font-size: 0.72rem;
+  color: rgba(255,255,255,.75);
+  font-weight: 400;
+  margin-top: 3px;
+}
+
+/* --------------------------------------------------------------------------
+   8.  Auth card
+   -------------------------------------------------------------------------- */
+.auth-card {
+  width: 100%;
+  max-width: 432px;
+  background: var(--c-white);
+  border-radius: var(--r-2xl);
+  box-shadow: var(--s-card);
+  padding: 44px 40px 36px;
+  /* Subtle pink-top accent */
+  border-top: 3px solid var(--c-rose-mid);
+}
+
+.card-icon {
+  width: 62px; height: 62px;
+  background: var(--c-rose-tint);
+  border-radius: var(--r-xl);
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 20px;
+  color: var(--c-rose-mid);
+}
+.card-icon svg { width: 27px; height: 27px; }
+
+.card-title {
+  font-family: var(--f-display);
+  font-size: 1.85rem;
+  font-weight: 700;
+  color: var(--c-ink);
+  text-align: center;
+  line-height: 1.2;
+  margin-bottom: 6px;
+}
+.card-title .accent { color: var(--c-rose-mid); }
+
+.card-subtitle {
+  font-size: 0.85rem;
+  color: var(--c-muted);
+  text-align: center;
+  margin-bottom: 28px;
+}
+
+/* --------------------------------------------------------------------------
+   9.  Alert banner
+   -------------------------------------------------------------------------- */
+.banner {
+  border-radius: var(--r-md);
+  padding: 11px 16px;
+  font-size: 0.82rem;
+  font-weight: 500;
+  margin-bottom: 16px;
+  line-height: 1.4;
+  display: none;
+}
+
+.banner--error {
+  display: block;
+  background: #fff1f2;
+  color: var(--c-error);
+  border: 1.5px solid #fecaca;
+}
+
+.banner--success {
+  display: block;
+  background: #f0fdf4;
+  color: var(--c-success);
+  border: 1.5px solid #bbf7d0;
+}
+
+/* --------------------------------------------------------------------------
+   10.  Form
+   -------------------------------------------------------------------------- */
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.form__row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+/* --------------------------------------------------------------------------
+   11.  Field
+   -------------------------------------------------------------------------- */
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.field__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.field__label {
+  font-size: 0.80rem;
+  font-weight: 600;
+  color: var(--c-ink-2);
+  letter-spacing: 0.02em;
+}
+
+.field__link {
+  font-size: 0.76rem;
+  font-weight: 500;
+  color: var(--c-rose-mid);
+}
+.field__link:hover { color: var(--c-rose); }
+
+/* --------------------------------------------------------------------------
+   12.  Input wrapper
+   -------------------------------------------------------------------------- */
+.input-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.input-wrap input {
+  width: 100%;
+  height: 48px;
+  padding: 0 14px 0 42px;
+  border: 1.5px solid var(--c-border);
+  border-radius: var(--r-md);
+  background: var(--c-surface);
+  font-family: var(--f-sans);
+  font-size: 0.875rem;
+  color: var(--c-ink);
+  outline: none;
+  transition: border-color var(--ease), box-shadow var(--ease), background var(--ease);
+  -webkit-appearance: none;
+}
+
+.input-wrap input::placeholder { color: var(--c-soft); }
+
+.input-wrap input:focus {
+  border-color: var(--c-rose-mid);
+  box-shadow: var(--s-input);
+  background: var(--c-white);
+}
+
+.input-wrap input.is-error {
+  border-color: var(--c-error);
+  box-shadow: 0 0 0 3px rgba(220,38,38,.14);
+}
+
+.input-icon {
+  position: absolute;
+  left: 14px;
+  display: flex;
+  align-items: center;
+  pointer-events: none;
+  color: var(--c-soft);
+  transition: color var(--ease);
+}
+.input-icon svg { width: 16px; height: 16px; }
+.input-wrap:focus-within .input-icon { color: var(--c-rose-mid); }
+
+.eye-btn {
+  position: absolute;
+  right: 12px;
+  width: 30px; height: 30px;
+  display: flex; align-items: center; justify-content: center;
+  border-radius: var(--r-sm);
+  color: var(--c-soft);
+  transition: color var(--ease), background var(--ease);
+}
+.eye-btn svg { width: 16px; height: 16px; }
+.eye-btn:hover { color: var(--c-rose-mid); background: var(--c-rose-tint); }
+
+/* --------------------------------------------------------------------------
+   13.  Field error
+   -------------------------------------------------------------------------- */
+.field-error {
+  display: block;
+  font-size: 0.73rem;
+  color: var(--c-error);
+  min-height: 16px;
+  line-height: 1.4;
+}
+
+/* --------------------------------------------------------------------------
+   14.  Checkbox
+   -------------------------------------------------------------------------- */
+.check-label {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 0.82rem;
+  color: var(--c-muted);
+  cursor: pointer;
+  user-select: none;
+  line-height: 1.45;
+}
+
+.check-label a { font-weight: 600; color: var(--c-rose-mid); }
+.check-label a:hover { color: var(--c-rose); }
+.check-label input[type="checkbox"] { display: none; }
+
+.checkmark {
+  flex-shrink: 0;
+  margin-top: 1px;
+  width: 18px; height: 18px;
+  border: 1.5px solid var(--c-border);
+  border-radius: 5px;
+  background: var(--c-surface);
+  display: flex; align-items: center; justify-content: center;
+  transition: all var(--ease);
+}
+
+.check-label input[type="checkbox"]:checked + .checkmark {
+  background: var(--c-rose-mid);
+  border-color: var(--c-rose-mid);
+}
+
+.check-label input[type="checkbox"]:checked + .checkmark::after {
+  content: '';
+  display: block;
+  width: 9px; height: 5px;
+  border-left: 2px solid white;
+  border-bottom: 2px solid white;
+  transform: rotate(-45deg) translateY(-1px);
+}
+
+/* --------------------------------------------------------------------------
+   15.  Primary button
+   -------------------------------------------------------------------------- */
+.btn-primary {
+  width: 100%;
+  height: 52px;
+  margin-top: 4px;
+  background: linear-gradient(135deg, var(--c-rose) 0%, var(--c-rose-light) 100%);
+  color: var(--c-white);
+  border-radius: var(--r-md);
+  font-family: var(--f-sans);
+  font-size: 0.92rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  display: flex; align-items: center; justify-content: center;
+  gap: 9px;
+  box-shadow: var(--s-btn);
+  transition: transform var(--ease), box-shadow var(--ease), background var(--ease);
+}
+
+.btn-primary:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(194,55,95,.48), 0 2px 8px rgba(194,55,95,.28);
+  background: linear-gradient(135deg, #b52d56 0%, #d4457a 100%);
+}
+
+.btn-primary:active:not(:disabled) {
+  transform: translateY(0);
+  box-shadow: var(--s-btn);
+}
+
+.btn-primary:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* --------------------------------------------------------------------------
+   16.  Divider
+   -------------------------------------------------------------------------- */
+.divider {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 20px 0 16px;
+}
+
+.divider::before, .divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--c-border);
+}
+
+.divider span {
+  font-size: 0.74rem;
+  color: var(--c-soft);
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+/* --------------------------------------------------------------------------
+   17.  Social buttons
+   -------------------------------------------------------------------------- */
+.social-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+
+.social-btn {
+  height: 44px;
+  display: flex; align-items: center; justify-content: center;
+  gap: 7px;
+  border: 1.5px solid var(--c-border);
+  border-radius: var(--r-md);
+  background: var(--c-white);
+  font-family: var(--f-sans);
+  font-size: 0.80rem;
+  font-weight: 500;
+  color: var(--c-ink-2);
+  transition: border-color var(--ease), background var(--ease), transform var(--ease);
+}
+
+.social-btn:hover {
+  border-color: var(--c-rose-mid);
+  background: var(--c-rose-tint);
+  color: var(--c-rose);
+  transform: translateY(-1px);
+}
+
+/* --------------------------------------------------------------------------
+   18.  Switch text
+   -------------------------------------------------------------------------- */
+.switch-text {
+  text-align: center;
+  font-size: 0.83rem;
+  color: var(--c-muted);
+  margin-top: 20px;
+}
+
+.switch-text a { font-weight: 600; }
+
+/* --------------------------------------------------------------------------
+   19.  Footer
+   -------------------------------------------------------------------------- */
+.site-footer {
+  position: relative;
+  z-index: 2;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-top: 1px solid rgba(0,0,0,.07);
+  padding: 22px 60px 18px;
+}
+
+.site-footer__inner {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.site-footer__features {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px 16px;
+  margin-bottom: 16px;
+}
+
+.footer-feat {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.footer-feat__icon {
+  width: 34px; height: 34px;
+  flex-shrink: 0;
+  background: var(--c-rose-tint);
+  border-radius: var(--r-sm);
+  display: flex; align-items: center; justify-content: center;
+  color: var(--c-rose-mid);
+}
+.footer-feat__icon svg { width: 16px; height: 16px; }
+
+.footer-feat__text strong {
+  display: block;
+  font-size: 0.80rem;
+  font-weight: 600;
+  color: var(--c-ink-2);
+  line-height: 1.2;
+}
+
+.footer-feat__text small {
+  display: block;
+  font-size: 0.70rem;
+  color: var(--c-muted);
+  margin-top: 2px;
+}
+
+.site-footer__bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 12px;
+  border-top: 1px solid var(--c-border);
+}
+
+.site-footer__copy {
+  font-size: 0.74rem;
+  color: var(--c-soft);
+}
+
+.site-footer__links {
+  display: flex;
+  gap: 20px;
+}
+
+.site-footer__links a {
+  font-size: 0.74rem;
+  color: var(--c-muted);
+  font-weight: 400;
+}
+.site-footer__links a:hover { color: var(--c-rose-mid); }
+
+/* --------------------------------------------------------------------------
+   20.  Responsive — Tablet (≤ 960px)
+   -------------------------------------------------------------------------- */
+@media (max-width: 960px) {
+  .auth-layout__left  { padding: 36px 36px 44px; }
+  .auth-layout__right { width: 450px; padding: 32px 28px; }
+  .auth-card          { padding: 36px 32px 30px; }
+  .site-footer        { padding: 20px 32px 16px; }
+
+  .site-footer__features { grid-template-columns: repeat(2, 1fr); }
+}
+
+/* --------------------------------------------------------------------------
+   21.  Responsive — Mobile (≤ 640px)
+   -------------------------------------------------------------------------- */
+@media (max-width: 640px) {
+  /* Stack: background image / brand on top, card below */
+  .auth-layout {
+    flex-direction: column;
+  }
+
+  .auth-layout__left {
+    min-height: 220px;
+    padding: 28px 24px 36px;
+    justify-content: flex-end;
+  }
+
+  .auth-layout__right {
+    width: 100%;
+    padding: 0 16px 28px;
+    background: transparent;
+    /* Card overlaps bottom of left panel */
+    margin-top: -28px;
+  }
+
+  .auth-card {
+    max-width: 100%;
+    border-radius: var(--r-xl) var(--r-xl) var(--r-lg) var(--r-lg);
+    padding: 32px 24px 28px;
+  }
+
+  .brand-headline { font-size: 1.65rem; }
+  .brand-stats    { gap: 24px; }
+
+  .form__row { grid-template-columns: 1fr; }
+
+  .site-footer {
+    padding: 16px 20px 14px;
+  }
+
+  .site-footer__features {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+
+  .site-footer__bottom {
+    flex-direction: column;
+    gap: 8px;
+    text-align: center;
+  }
+
+  .site-footer__links { justify-content: center; }
+}
+
+/* --------------------------------------------------------------------------
+   22.  Responsive — Small phones (≤ 390px)
+   -------------------------------------------------------------------------- */
+@media (max-width: 390px) {
+  .social-grid { grid-template-columns: 1fr; }
+
+  .social-btn {
+    height: 46px;
+    font-size: 0.85rem;
+    justify-content: flex-start;
+    padding: 0 20px;
+    gap: 10px;
+  }
+
+  .site-footer__features { grid-template-columns: 1fr; }
+}

@@ -1,0 +1,17 @@
+/* ==========================================================================
+   Nancy Beauty — login.css
+   Login-page–specific overrides only. Global styles live in global.css.
+   ========================================================================== */
+
+/* Slightly wider right panel for the login card */
+.auth-layout--login .auth-layout__right {
+  width: 490px;
+}
+
+@media (max-width: 960px) {
+  .auth-layout--login .auth-layout__right { width: 440px; }
+}
+
+@media (max-width: 640px) {
+  .auth-layout--login .auth-layout__right { width: 100%; }
+}
